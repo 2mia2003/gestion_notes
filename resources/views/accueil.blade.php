@@ -10,4 +10,10 @@
             Bienvenue <span class="font-semibold text-[#0d121b] dark:text-white">{{ auth()->user()->name }}</span>
         </p>
     </div>
+    <a href="{{ route('filiere.index') }}">module&filiere
+        
+    </a>
+
+
+
 @endsection
