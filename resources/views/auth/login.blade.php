@@ -33,12 +33,13 @@
         Se connecter
     </button>
 
-    {{-- REGISTER LINK --}}
+    {{-- REGISTER LINKS --}}
     <p class="text-center text-sm mt-4">
         Pas de compte ?
-        <a href="{{ route('register') }}" class="text-blue-600 underline">
-            Inscrivez-vous
+        <a href="{{ route('student.register') }}" class="text-blue-600 underline">
+            Inscrivez-vous (Étudiant)
         </a>
+       
     </p>
 </form>
 @endsection

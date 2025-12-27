@@ -9,5 +9,6 @@
         <p class="text-[#4c669a] dark:text-gray-400 mt-2">
             Bienvenue <span class="font-semibold text-[#0d121b] dark:text-white">{{ auth()->user()->name }}</span>
         </p>
+        
     </div>
 @endsection

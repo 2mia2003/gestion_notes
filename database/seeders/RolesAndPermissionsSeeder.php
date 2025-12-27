@@ -26,18 +26,18 @@ class RolesAndPermissionsSeeder extends Seeder
             Permission::firstOrCreate(['name' => $p]);
         }
 
-        $admin = Role::firstOrCreate(['name' => 'Admin']);
+        $admin = Role::firstOrCreate(['name' => 'admin']);
         $admin->syncPermissions($permissions);
 
-        $enseignant = Role::firstOrCreate(['name' => 'Enseignant']);
+        $enseignant = Role::firstOrCreate(['name' => 'enseignant']);
         $enseignant->syncPermissions(['scan_import_notes', 'archive_edit']);
 
-        $secretaire = Role::firstOrCreate(['name' => 'Secretaire']);
+        $secretaire = Role::firstOrCreate(['name' => 'secretaire']);
         $secretaire->syncPermissions(['scan_import_notes']);
 
-        // Met Admin sur le user id=1 si existe
+        // Met admin sur le user id=1 si existe
         if ($user = User::find(1)) {
-            $user->syncRoles(['Admin']);
+            $user->syncRoles(['admin']);
         }
     }
 }

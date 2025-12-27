@@ -32,4 +32,31 @@ class UserRoleController extends Controller
 
         return back()->with('success', "Rôle mis à jour pour {$user->name} : {$request->role}");
     }
+
+    public function updateDetails(Request $request, User $user)
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
+        ]);
+
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+        ]);
+
+        return back()->with('success', "Profil mis à jour pour {$user->name}.");
+    }
+
+    public function destroy(User $user)
+    {
+        if (auth()->id() === $user->id) {
+            return back()->with('error', "Tu ne peux pas supprimer ton propre compte.");
+        }
+
+        $name = $user->name;
+        $user->delete();
+
+        return back()->with('success', "Utilisateur supprimé: {$name}.");
+    }
 }
