@@ -59,6 +59,7 @@ Route::middleware(['auth'])->group(function () {
 
         // Academique routes removed per request
     });
+    Route::view('/filieres', 'filiere.index')->name('filiere.index');
 });
 
 require __DIR__.'/auth.php';

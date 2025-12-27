@@ -11,4 +11,10 @@
         </p>
         
     </div>
+    <a href="{{ route('filiere.index') }}">module&filiere
+        
+    </a>
+
+
+
 @endsection
