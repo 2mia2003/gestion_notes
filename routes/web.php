@@ -1,6 +1,11 @@
  <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FiliereController;
+use App\Http\Controllers\DepartementController;
+use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\SemestreController;
+use App\Http\Controllers\AnneeAcademiqueController;
 use App\Http\Controllers\Admin\UserRoleController;
 use App\Http\Controllers\Admin\SessionController;
 // Removed academique controllers
@@ -24,6 +29,32 @@ Route::middleware(['auth'])->group(function () {
         return view('gestion_profil');
     })->name('gestion.profil');
 
+    // Gestion Filières (accessible à tout utilisateur authentifié)
+    Route::get('/filiere/{filiere?}', [FiliereController::class, 'index'])
+        ->name('filiere.index');
+    Route::post('/filiere', [FiliereController::class, 'store'])->name('filiere.store');
+    Route::put('/filiere/{filiere}', [FiliereController::class, 'update'])->name('filiere.update');
+    Route::delete('/filiere/{filiere}', [FiliereController::class, 'destroy'])->name('filiere.destroy');
+
+    // Départements (création rapide)
+    Route::post('/departement', [DepartementController::class, 'store'])->name('departement.store');
+
+    // Modules
+    Route::get('/module/{module?}', [ModuleController::class, 'index'])->name('module.index');
+    Route::post('/module', [ModuleController::class, 'store'])->name('module.store');
+    Route::put('/module/{module}', [ModuleController::class, 'update'])->name('module.update');
+    Route::delete('/module/{module}', [ModuleController::class, 'destroy'])->name('module.destroy');
+
+    // Semestres
+    Route::get('/semestre/{semestre?}', [SemestreController::class, 'index'])->name('semestre.index');
+    Route::post('/semestre', [SemestreController::class, 'store'])->name('semestre.store');
+    Route::put('/semestre/{semestre}', [SemestreController::class, 'update'])->name('semestre.update');
+    Route::delete('/semestre/{semestre}', [SemestreController::class, 'destroy'])->name('semestre.destroy');
+
+    // Année académique (création rapide depuis la page Semestres)
+    Route::post('/annee-academique', [AnneeAcademiqueController::class, 'store'])->name('annee-academique.store');
+    Route::post('/annee-academique/{annee}/set-active', [AnneeAcademiqueController::class, 'setActive'])->name('annee-academique.set-active');
+                                       
     // =========================
     // Zone ADMIN (Spatie)
     // =========================

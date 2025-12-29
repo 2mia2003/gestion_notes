@@ -61,6 +61,13 @@
                         Accueil
                     </a>
 
+                    <a href="{{ route('filiere.index') }}"
+                       class="flex items-center gap-3 px-3 py-2.5 rounded-lg
+                       {{ request()->routeIs('filiere.index') ? 'bg-[#135bec]/10 border-l-4 border-[#135bec] text-[#135bec] font-bold' : 'hover:bg-gray-50 dark:hover:bg-gray-800 text-[#4c669a] dark:text-gray-400' }}">
+                        <span class="material-symbols-outlined">schema</span>
+                        Filières & Modules
+                    </a>
+
                     <a href="{{ route('parametres') }}"
                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg
                        {{ request()->routeIs('parametres') ? 'bg-[#135bec]/10 border-l-4 border-[#135bec] text-[#135bec] font-bold' : 'hover:bg-gray-50 dark:hover:bg-gray-800 text-[#4c669a] dark:text-gray-400' }}">
@@ -107,6 +114,8 @@
                 <div class="flex items-center gap-6">
                     <a class="text-[#0d121b] dark:text-gray-200 text-sm font-medium hover:text-[#135bec] transition-colors"
                        href="{{ route('accueil') }}">Accueil</a>
+                          <a class="text-[#0d121b] dark:text-gray-200 text-sm font-medium hover:text-[#135bec] transition-colors"
+                              href="{{ route('filiere.index') }}">Filières & Modules</a>
                     <a class="text-[#0d121b] dark:text-gray-200 text-sm font-medium hover:text-[#135bec] transition-colors"
                        href="{{ route('parametres') }}">Paramètres</a>
                     <a class="text-[#0d121b] dark:text-gray-200 text-sm font-medium hover:text-[#135bec] transition-colors"
