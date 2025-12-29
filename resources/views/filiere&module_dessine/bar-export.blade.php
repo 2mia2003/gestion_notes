@@ -79,8 +79,8 @@
                     Filières &amp; Modules
                 </a>
 
-                <a class="px-4 py-2 text-sm font-medium text-text-sec-light dark:text-text-sec-dark hover:text-primary transition-colors"
-                   href="{{ Route::has('etudiant.index') ? route('etudiant.index') : '#' }}"
+                     <a class="px-4 py-2 text-sm font-medium text-text-sec-light dark:text-text-sec-dark hover:text-primary transition-colors"
+                         href="{{ Route::has('etudiant.index') ? route('etudiant.index') : '#' }}">
                     Étudiants
                 </a>
 
@@ -152,7 +152,7 @@
                 <a class="{{ $tab==='modules'
                         ? 'relative flex items-center gap-2 pb-4 text-sm font-bold text-primary'
                         : 'group flex items-center gap-2 pb-4 text-sm font-medium text-text-sec-light dark:text-text-sec-dark hover:text-primary transition-colors' }}"
-                    href="{{ Route::has('module.index') ? route('.index') : '#' }}"
+                    href="{{ route('module.index') }}">
                     <span class="material-symbols-outlined {{ $tab==='modules' ? '' : 'group-hover:text-primary' }}">view_module</span>
                     Modules
                     @if($tab==='modules')
@@ -172,9 +172,9 @@
                 </a>
 
                 <a class="{{ $tab==='semestres'
-                        ? 'relative flex items-center gap-2 pb-4 text-sm font-bold text-primary'
-                        : 'group flex items-center gap-2 pb-4 text-sm font-medium text-text-sec-light dark:text-text-sec-dark hover:text-primary transition-colors' }}"
-                   href="{{ Route::has('semestre.index') ? route('semestre.index') : '#' }}"
+                    ? 'relative flex items-center gap-2 pb-4 text-sm font-bold text-primary'
+                    : 'group flex items-center gap-2 pb-4 text-sm font-medium text-text-sec-light dark:text-text-sec-dark hover:text-primary transition-colors' }}"
+                   href="{{ route('semestre.index') }}">
                     <span class="material-symbols-outlined {{ $tab==='semestres' ? '' : 'group-hover:text-primary' }}">calendar_month</span>
                     Semestres
                     @if($tab==='semestres')
@@ -185,7 +185,7 @@
                 <a class="{{ $tab==='responsables'
                         ? 'relative flex items-center gap-2 pb-4 text-sm font-bold text-primary'
                         : 'group flex items-center gap-2 pb-4 text-sm font-medium text-text-sec-light dark:text-text-sec-dark hover:text-primary transition-colors' }}"
-                    href="{{ Route::has('responsable.index') ? route('responsable.index') : '#' }}"
+                    href="{{ Route::has('responsable.index') ? route('responsable.index') : '#' }}">
                     <span class="material-symbols-outlined {{ $tab==='responsables' ? '' : 'group-hover:text-primary' }}">groups</span>
                     Responsables
                     @if($tab==='responsables')

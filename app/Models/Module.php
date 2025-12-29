@@ -11,6 +11,7 @@ class Module extends Model
         'semestre_id',
         'code',
         'nom',
+        'statut',
         'responsable_user_id',
         'credits',
     ];
