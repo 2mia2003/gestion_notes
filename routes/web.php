@@ -91,6 +91,10 @@ Route::middleware(['auth'])->group(function () {
         // Academique routes removed per request
     });
     // Removed duplicate view route that shadowed filiere.index controller route
+    Route::get('/imports/upload', fn() => view('imports.step1_upload'))->name('imports.step1');
+Route::get('/imports/details', fn() => view('imports.step2_details'))->name('imports.step2');
+Route::get('/imports/validation', fn() => view('imports.step3_validation'))->name('imports.step3');
+
 });
 
 require __DIR__.'/auth.php';

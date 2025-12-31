@@ -23,7 +23,17 @@
 
             
             <div class="rounded-xl border border-dashed border-[#e7ebf3] dark:border-gray-700 p-5 text-sm text-[#4c669a] dark:text-gray-400">
-               XXXXXXXXXXXXXXXXXXXXXXX
+                <a href="{{ route('imports.step1') }}" class="group rounded-xl border border-[#e7ebf3] dark:border-gray-700 bg-white dark:bg-[#121a27] p-5 hover:shadow-md transition-shadow">
+                     <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-[#135bec] group-hover:scale-105 transition-transform">schema</span>
+                    <div>
+                        <h3 class="text-base font-bold">importation_notes</h3>
+                        <p class="text-sm text-[#4c669a] dark:text-gray-400">Gérer les importation et numerisation via ocr</p>
+                    </div>
+                </div>
+
+
+                </a>
             </div>
 
              <div class="rounded-xl border border-dashed border-[#e7ebf3] dark:border-gray-700 p-5 text-sm text-[#4c669a] dark:text-gray-400">
@@ -35,9 +45,8 @@
             </div>
         </div>
     </div>
-    <a href="{{ route('filiere.index') }}">module&filiere
-        
-    </a>
+     
+  
 
 
 

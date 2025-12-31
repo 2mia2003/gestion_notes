@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -9,19 +9,34 @@ return new class extends Migration {
     {
         Schema::create('modules', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('niveau_id')->constrained('niveaux')->cascadeOnDelete();
 
+            // 🔗 Lien vers le niveau
+            $table->foreignId('niveau_id')
+                ->constrained('niveaux')
+                ->cascadeOnDelete();
+
+            // 🔗 Lien vers le semestre (OPTIONNEL)
+            $table->foreignId('semestre_id')
+                ->nullable()
+                ->constrained('semestres')
+                ->nullOnDelete();
+
+            // Infos module
             $table->string('code', 30);
             $table->string('nom', 200);
 
-            // enseignant responsable (optionnel) : user_id
-            $table->foreignId('responsable_user_id')->nullable()->constrained('users')->nullOnDelete();
+            // 👤 Enseignant responsable (user)
+            $table->foreignId('responsable_user_id')
+                ->nullable()
+                ->constrained('users')
+                ->nullOnDelete();
 
             $table->unsignedTinyInteger('credits')->default(0);
 
             $table->timestamps();
 
-            $table->unique(['niveau_id', 'code']);
+            // 🔐 Unicité logique
+            $table->unique(['niveau_id', 'semestre_id', 'code']);
         });
     }
 
