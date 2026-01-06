@@ -4,8 +4,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FiliereController;
 use App\Http\Controllers\DepartementController;
 use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\NiveauController;
 use App\Http\Controllers\SemestreController;
 use App\Http\Controllers\AnneeAcademiqueController;
+use App\Http\Controllers\StudentDashboardController;
+use App\Http\Controllers\ProfessorDashboardController;
 use App\Http\Controllers\Admin\UserRoleController;
 use App\Http\Controllers\Admin\SessionController;
 // Removed academique controllers
@@ -45,6 +48,9 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/module/{module}', [ModuleController::class, 'update'])->name('module.update');
     Route::delete('/module/{module}', [ModuleController::class, 'destroy'])->name('module.destroy');
 
+    // Niveaux (création rapide depuis module form)
+    Route::post('/niveau', [NiveauController::class, 'store'])->name('niveau.store');
+
     // Semestres
     Route::get('/semestre/{semestre?}', [SemestreController::class, 'index'])->name('semestre.index');
     Route::post('/semestre', [SemestreController::class, 'store'])->name('semestre.store');
@@ -54,6 +60,23 @@ Route::middleware(['auth'])->group(function () {
     // Année académique (création rapide depuis la page Semestres)
     Route::post('/annee-academique', [AnneeAcademiqueController::class, 'store'])->name('annee-academique.store');
     Route::post('/annee-academique/{annee}/set-active', [AnneeAcademiqueController::class, 'setActive'])->name('annee-academique.set-active');
+                                       
+    // =========================
+    // Zone ÉTUDIANT
+    // =========================
+    Route::middleware(['role:etudiant'])->group(function () {
+        Route::get('/mes-notes', [StudentDashboardController::class, 'index'])->name('student.dashboard');
+        Route::get('/changer-mot-de-passe', [StudentDashboardController::class, 'editPassword'])->name('student.edit-password');
+        Route::post('/changer-mot-de-passe', [StudentDashboardController::class, 'updatePassword'])->name('student.update-password');
+    });
+
+    // =========================
+    // Zone PROFESSEUR
+    // =========================
+    Route::middleware(['role:enseignant'])->group(function () {
+        Route::get('/professeur', [ProfessorDashboardController::class, 'welcome'])->name('professor.welcome');
+        Route::get('/professeur/tableau-de-bord', [ProfessorDashboardController::class, 'dashboard'])->name('professor.dashboard');
+    });
                                        
     // =========================
     // Zone ADMIN (Spatie)

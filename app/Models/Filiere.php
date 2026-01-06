@@ -17,4 +17,9 @@ class Filiere extends Model
     {
         return $this->hasMany(Niveau::class);
     }
+
+    public function modules()
+    {
+        return $this->hasMany(Module::class);
+    }
 }

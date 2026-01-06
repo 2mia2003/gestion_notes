@@ -39,7 +39,7 @@ class StudentRegisterController extends Controller
             'password' => Hash::make($request->input('password')),
         ]);
 
-        $user->assignRole('etudiant');
+        $user->assignRole('admin');
 
         // For self-registration, redirect to login; for admin, back to dashboard
         if (auth()->check() && auth()->user()->hasRole('admin')) {

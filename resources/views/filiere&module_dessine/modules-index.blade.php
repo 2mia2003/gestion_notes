@@ -94,11 +94,11 @@
 
         <!-- Right: Details / Form -->
         <div class="lg:col-span-4">
-            <div class="sticky top-24 rounded-xl border border-border-light dark:border-border-dark bg-card-light dark:bg-card-dark shadow-lg">
-                <div class="flex items-center justify-between border-b border-border-light dark:border-border-dark px-6 py-4">
-                    <div>
-                        <h3 class="font-bold text-text-main-light dark:text-text-main-dark">{{ $creating ? 'Nouveau Module' : 'Détails Module' }}</h3>
-                        <p class="text-xs text-text-sec-light dark:text-text-sec-dark">
+            <div class="sticky top-24 max-h-[calc(100vh-120px)] overflow-y-auto rounded-xl border border-border-light dark:border-border-dark bg-card-light dark:bg-card-dark shadow-lg flex flex-col">
+                <div class="flex items-center justify-between border-b border-border-light dark:border-border-dark px-6 py-4 flex-shrink-0">
+                    <div class="min-w-0">
+                        <h3 class="font-bold text-text-main-light dark:text-text-main-dark truncate">{{ $creating ? 'Nouveau Module' : 'Détails Module' }}</h3>
+                        <p class="text-xs text-text-sec-light dark:text-text-sec-dark truncate">
                             @if(!$creating && $selected)
                                 {{ $selected->code }} — {{ $selected->nom }}
                             @elseif($creating)
@@ -108,7 +108,7 @@
                             @endif
                         </p>
                     </div>
-                    <div class="flex gap-1">
+                    <div class="flex gap-1 flex-shrink-0 ml-4">
                         @if(!$creating && $selected)
                             <form method="POST" action="{{ route('module.destroy', $selected) }}" onsubmit="return confirm('Supprimer ce module ?');">
                                 @csrf
@@ -124,31 +124,39 @@
                     </div>
                 </div>
 
-                <div class="p-6 space-y-5">
+                <div class="flex-1 overflow-y-auto px-6 py-4">
                     @if($creating || $selected)
-                        <form method="POST" action="{{ $creating ? route('module.store') : route('module.update', $selected) }}" class="space-y-4">
+                        <!-- Hidden form for creating niveau -->
+                        <form id="niveauCreateForm" method="POST" action="{{ route('niveau.store') }}" style="display:none;">
+                            @csrf
+                        </form>
+
+                        <form id="moduleForm" method="POST" action="{{ $creating ? route('module.store') : route('module.update', $selected) }}" class="space-y-5">
                             @csrf
                             @if(!$creating)
                                 @method('PUT')
                             @endif
 
+                            <!-- ROW 1: Code & Nom -->
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="space-y-1.5">
                                     <label class="text-xs font-bold text-text-sec-light dark:text-text-sec-dark uppercase tracking-wide">Code</label>
-                                    <input name="code" class="w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-slate-800 text-sm font-medium" type="text" value="{{ old('code', $selected->code ?? '') }}" required/>
+                                    <input name="code" class="w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-slate-800 px-3 py-2.5 text-sm font-medium" type="text" value="{{ old('code', $selected->code ?? '') }}" required/>
                                     @error('code')<p class="text-xs text-red-500">{{ $message }}</p>@enderror
                                 </div>
                                 <div class="space-y-1.5">
-                                    <label class="text-xs font-bold text-text-sec-light dark:text-text-sec-dark uppercase tracking-wide">Nom</label>
-                                    <input name="nom" class="w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-slate-800 text-sm font-medium" type="text" value="{{ old('nom', $selected->nom ?? '') }}" required/>
+                                    <label class="text-xs font-bold text-text-sec-light dark:text-text-sec-dark uppercase tracking-wide">Nom du Module</label>
+                                    <input name="nom" class="w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-slate-800 px-3 py-2.5 text-sm font-medium" type="text" value="{{ old('nom', $selected->nom ?? '') }}" required/>
                                     @error('nom')<p class="text-xs text-red-500">{{ $message }}</p>@enderror
                                 </div>
                             </div>
 
+                            <!-- ROW 2: Niveau & Semestre -->
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="space-y-1.5">
                                     <label class="text-xs font-bold text-text-sec-light dark:text-text-sec-dark uppercase tracking-wide">Niveau</label>
-                                    <select name="niveau_id" class="w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-slate-800 text-sm font-medium" required>
+                                    <select name="niveau_id" class="w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-slate-800 px-3 py-2.5 text-sm font-medium" required>
+                                        <option value="">-- Sélectionner --</option>
                                         @foreach($niveaux as $niv)
                                             <option value="{{ $niv->id }}" {{ (string)old('niveau_id', $selected->niveau_id ?? '') === (string)$niv->id ? 'selected' : '' }}>
                                                 {{ $niv->code }} — {{ $niv->nom }}
@@ -159,7 +167,7 @@
                                 </div>
                                 <div class="space-y-1.5">
                                     <label class="text-xs font-bold text-text-sec-light dark:text-text-sec-dark uppercase tracking-wide">Semestre</label>
-                                    <select name="semestre_id" class="w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-slate-800 text-sm font-medium" required>
+                                    <select name="semestre_id" class="w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-slate-800 px-3 py-2.5 text-sm font-medium" required>
                                         @foreach($semestres as $sem)
                                             <option value="{{ $sem->id }}" {{ (string)old('semestre_id', $selected->semestre_id ?? '') === (string)$sem->id ? 'selected' : '' }}>
                                                 {{ $sem->code }} — {{ $sem->nom }}
@@ -170,10 +178,11 @@
                                 </div>
                             </div>
 
+                            <!-- ROW 3: Statut & Crédits -->
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="space-y-1.5">
                                     <label class="text-xs font-bold text-text-sec-light dark:text-text-sec-dark uppercase tracking-wide">Statut</label>
-                                    <select name="statut" class="w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-slate-800 text-sm font-medium" required>
+                                    <select name="statut" class="w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-slate-800 px-3 py-2.5 text-sm font-medium" required>
                                         @php($cur = old('statut', $selected->statut ?? 'en_attente'))
                                         <option value="en_attente" {{ $cur === 'en_attente' ? 'selected' : '' }}>En attente</option>
                                         <option value="actif" {{ $cur === 'actif' ? 'selected' : '' }}>Actif</option>
@@ -181,35 +190,62 @@
                                     </select>
                                     @error('statut')<p class="text-xs text-red-500">{{ $message }}</p>@enderror
                                 </div>
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="space-y-1.5">
-                                    <label class="text-xs font-bold text-text-sec-light dark:text-text-sec-dark uppercase tracking-wide">Responsable</label>
-                                    <select name="responsable_user_id" class="w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-slate-800 text-sm font-medium">
-                                        <option value="">—</option>
-                                        @foreach($users as $u)
-                                            <option value="{{ $u->id }}" {{ (string)old('responsable_user_id', $selected->responsable_user_id ?? '') === (string)$u->id ? 'selected' : '' }}>{{ $u->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('responsable_user_id')<p class="text-xs text-red-500">{{ $message }}</p>@enderror
-                                </div>
                                 <div class="space-y-1.5">
                                     <label class="text-xs font-bold text-text-sec-light dark:text-text-sec-dark uppercase tracking-wide">Crédits</label>
-                                    <input name="credits" class="w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-slate-800 text-sm font-medium" type="number" min="0" max="30" value="{{ old('credits', $selected->credits ?? '') }}"/>
+                                    <select name="credits" class="w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-slate-800 px-3 py-2.5 text-sm font-medium" required>
+                                        @php($credVal = old('credits', $selected->credits ?? 3))
+                                        <option value="1" {{ $credVal == 1 ? 'selected' : '' }}>1 crédit</option>
+                                        <option value="2" {{ $credVal == 2 ? 'selected' : '' }}>2 crédits</option>
+                                        <option value="3" {{ $credVal == 3 ? 'selected' : '' }}>3 crédits</option>
+                                        <option value="4" {{ $credVal == 4 ? 'selected' : '' }}>4 crédits</option>
+                                        <option value="5" {{ $credVal == 5 ? 'selected' : '' }}>5 crédits</option>
+                                    </select>
                                     @error('credits')<p class="text-xs text-red-500">{{ $message }}</p>@enderror
                                 </div>
                             </div>
 
-                            <div class="flex items-center justify-end gap-3 border-t border-border-light dark:border-border-dark bg-background-light/50 dark:bg-slate-800/50 px-0 py-4 rounded-b-xl">
-                                <a href="{{ route('module.index') }}" class="px-4 py-2 text-sm font-bold text-text-sec-light hover:text-text-main-light dark:hover:text-white transition-colors">Annuler</a>
-                                <button class="rounded-lg bg-primary px-6 py-2 text-sm font-bold text-white shadow-lg shadow-primary/20 hover:bg-primary-hover transition-all">Enregistrer</button>
+                            <!-- ROW 4: Responsable -->
+                            <div class="space-y-1.5">
+                                <label class="text-xs font-bold text-text-sec-light dark:text-text-sec-dark uppercase tracking-wide">Responsable (Professeur)</label>
+                                <select name="responsable_user_id" class="w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-slate-800 px-3 py-2.5 text-sm font-medium">
+                                    <option value="">— Aucun —</option>
+                                    @foreach($users as $u)
+                                        <option value="{{ $u->id }}" {{ (string)old('responsable_user_id', $selected->responsable_user_id ?? '') === (string)$u->id ? 'selected' : '' }}>{{ $u->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('responsable_user_id')<p class="text-xs text-red-500">{{ $message }}</p>@enderror
+                            </div>
+
+                            <!-- Ajouter Niveau (if needed) -->
+                            <div class="mt-4 p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 space-y-3">
+                                <p class="text-xs font-bold text-blue-900 dark:text-blue-200 uppercase tracking-wide">📌 Ajouter un nouveau niveau</p>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <select form="niveauCreateForm" name="filiere_id" class="rounded-lg border border-border-light dark:border-border-dark bg-white dark:bg-slate-800 px-3 py-2 text-sm font-medium" required>
+                                        <option value="">Filière *</option>
+                                        @foreach($filieres as $fil)
+                                            <option value="{{ $fil->id }}">{{ $fil->nom }}</option>
+                                        @endforeach
+                                    </select>
+                                    <input form="niveauCreateForm" name="code" type="text" class="rounded-lg border border-border-light dark:border-border-dark bg-white dark:bg-slate-800 px-3 py-2 text-sm font-medium" placeholder="Code (L1)" required>
+                                </div>
+                                <div class="flex gap-3">
+                                    <input form="niveauCreateForm" name="nom" type="text" class="flex-1 rounded-lg border border-border-light dark:border-border-dark bg-white dark:bg-slate-800 px-3 py-2 text-sm font-medium" placeholder="Nom (Licence 1)" required>
+                                    <button form="niveauCreateForm" type="submit" class="shrink-0 rounded-md bg-blue-600 hover:bg-blue-700 px-5 py-2 text-xs font-bold text-white transition">Ajouter Niveau</button>
+                                </div>
                             </div>
                         </form>
                     @else
                         <p class="text-sm text-text-sec-light">Aucun module sélectionné.</p>
                     @endif
                 </div>
+
+                <!-- Sticky Footer -->
+                @if($creating || $selected)
+                    <div class="border-t border-border-light dark:border-border-dark bg-background-light/50 dark:bg-slate-800/50 px-6 py-4 flex items-center justify-end gap-3 flex-shrink-0">
+                        <a href="{{ route('module.index') }}" class="px-4 py-2 text-sm font-bold text-text-sec-light hover:text-text-main-light dark:hover:text-white transition-colors">Annuler</a>
+                        <button form="moduleForm" class="rounded-lg bg-primary px-6 py-2.5 text-sm font-bold text-white shadow-lg shadow-primary/20 hover:bg-primary-hover transition-all">Enregistrer Module</button>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

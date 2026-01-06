@@ -11,8 +11,14 @@ class UserRoleController extends Controller
 {
     public function index()
     {
+        // Ensure all roles exist
+        Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
+        Role::firstOrCreate(['name' => 'etudiant', 'guard_name' => 'web']);
+        Role::firstOrCreate(['name' => 'enseignant', 'guard_name' => 'web']);
+        Role::firstOrCreate(['name' => 'secretaire', 'guard_name' => 'web']);
+
         $users = User::latest()->paginate(10);
-        $roles = Role::orderBy('name')->pluck('name'); // ['admin','etudiant',...]
+        $roles = Role::orderBy('name')->pluck('name'); // ['admin','etudiant','enseignant','secretaire']
 
         return view('admin.dashboard', compact('users', 'roles'));
     }

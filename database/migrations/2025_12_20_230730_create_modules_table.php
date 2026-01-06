@@ -10,16 +10,17 @@ return new class extends Migration {
         Schema::create('modules', function (Blueprint $table) {
             $table->id();
 
+            // 🔗 Lien vers la filière
+            $table->foreignId('filiere_id')
+                ->nullable()
+                ->constrained('filieres')
+                ->nullOnDelete();
+
             // 🔗 Lien vers le niveau
             $table->foreignId('niveau_id')
                 ->constrained('niveaux')
                 ->cascadeOnDelete();
 
-            // 🔗 Lien vers le semestre (OPTIONNEL)
-            $table->foreignId('semestre_id')
-                ->nullable()
-                ->constrained('semestres')
-                ->nullOnDelete();
 
             // Infos module
             $table->string('code', 30);
@@ -36,7 +37,7 @@ return new class extends Migration {
             $table->timestamps();
 
             // 🔐 Unicité logique
-            $table->unique(['niveau_id', 'semestre_id', 'code']);
+            $table->unique(['niveau_id', 'code']);
         });
     }
 

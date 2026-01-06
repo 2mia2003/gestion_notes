@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Module extends Model
 {
     protected $fillable = [
+        'filiere_id',
         'niveau_id',
         'semestre_id',
         'code',
@@ -15,6 +16,11 @@ class Module extends Model
         'responsable_user_id',
         'credits',
     ];
+
+    public function filiere()
+    {
+        return $this->belongsTo(Filiere::class);
+    }
 
     public function niveau()
     {

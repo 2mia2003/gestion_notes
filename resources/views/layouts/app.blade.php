@@ -52,38 +52,54 @@
                     <p class="text-[#4c669a] dark:text-gray-400 text-sm font-normal leading-normal">Pages principales</p>
                 </div>
 
-                <!-- Liens principaux (les 3 que tu veux) -->
+                <!-- Liens principaux selon le rôle -->
                 <nav class="flex flex-col gap-2">
-                    <a href="{{ route('accueil') }}"
-                       class="flex items-center gap-3 px-3 py-2.5 rounded-lg
-                       {{ request()->routeIs('accueil') ? 'bg-[#135bec]/10 border-l-4 border-[#135bec] text-[#135bec] font-bold' : 'hover:bg-gray-50 dark:hover:bg-gray-800 text-[#4c669a] dark:text-gray-400' }}">
-                        <span class="material-symbols-outlined">home</span>
-                        Accueil
-                    </a>
+                    {{-- Zone Étudiant --}}
+                    @if(auth()->check() && auth()->user()->hasRole('etudiant'))
+                        <a href="{{ route('student.dashboard') }}"
+                           class="flex items-center gap-3 px-3 py-2.5 rounded-lg
+                           {{ request()->routeIs('student.dashboard') ? 'bg-[#135bec]/10 border-l-4 border-[#135bec] text-[#135bec] font-bold' : 'hover:bg-gray-50 dark:hover:bg-gray-800 text-[#4c669a] dark:text-gray-400' }}">
+                            <span class="material-symbols-outlined">assignment_ind</span>
+                            Mes Notes
+                        </a>
 
-                    <a href="{{ route('filiere.index') }}"
-                       class="flex items-center gap-3 px-3 py-2.5 rounded-lg
-                       {{ request()->routeIs('filiere.index') ? 'bg-[#135bec]/10 border-l-4 border-[#135bec] text-[#135bec] font-bold' : 'hover:bg-gray-50 dark:hover:bg-gray-800 text-[#4c669a] dark:text-gray-400' }}">
-                        <span class="material-symbols-outlined">schema</span>
-                        Filières & Modules
-                    </a>
+                        <a href="{{ route('student.edit-password') }}"
+                           class="flex items-center gap-3 px-3 py-2.5 rounded-lg
+                           {{ request()->routeIs('student.edit-password') ? 'bg-[#135bec]/10 border-l-4 border-[#135bec] text-[#135bec] font-bold' : 'hover:bg-gray-50 dark:hover:bg-gray-800 text-[#4c669a] dark:text-gray-400' }}">
+                            <span class="material-symbols-outlined">lock</span>
+                            Changer mot de passe
+                        </a>
+                    {{-- Zone Professeur --}}
+                    @elseif(auth()->check() && auth()->user()->hasRole('enseignant'))
+                        <a href="{{ route('professor.welcome') }}"
+                           class="flex items-center gap-3 px-3 py-2.5 rounded-lg
+                           {{ request()->routeIs('professor.welcome', 'professor.dashboard') ? 'bg-[#135bec]/10 border-l-4 border-[#135bec] text-[#135bec] font-bold' : 'hover:bg-gray-50 dark:hover:bg-gray-800 text-[#4c669a] dark:text-gray-400' }}">
+                            <span class="material-symbols-outlined">home</span>
+                            Accueil
+                        </a>
+                    {{-- Zone Admin --}}
+                    @elseif(auth()->check() && auth()->user()->hasRole('admin'))
+                        <a href="{{ route('accueil') }}"
+                           class="flex items-center gap-3 px-3 py-2.5 rounded-lg
+                           {{ request()->routeIs('accueil') ? 'bg-[#135bec]/10 border-l-4 border-[#135bec] text-[#135bec] font-bold' : 'hover:bg-gray-50 dark:hover:bg-gray-800 text-[#4c669a] dark:text-gray-400' }}">
+                            <span class="material-symbols-outlined">home</span>
+                            Accueil
+                        </a>
 
-                    <a href="{{ route('parametres') }}"
-                       class="flex items-center gap-3 px-3 py-2.5 rounded-lg
-                       {{ request()->routeIs('parametres') ? 'bg-[#135bec]/10 border-l-4 border-[#135bec] text-[#135bec] font-bold' : 'hover:bg-gray-50 dark:hover:bg-gray-800 text-[#4c669a] dark:text-gray-400' }}">
-                        <span class="material-symbols-outlined">settings</span>
-                        Paramètres
-                    </a>
+                        <a href="{{ route('filiere.index') }}"
+                           class="flex items-center gap-3 px-3 py-2.5 rounded-lg
+                           {{ request()->routeIs('filiere.index') ? 'bg-[#135bec]/10 border-l-4 border-[#135bec] text-[#135bec] font-bold' : 'hover:bg-gray-50 dark:hover:bg-gray-800 text-[#4c669a] dark:text-gray-400' }}">
+                            <span class="material-symbols-outlined">schema</span>
+                            Filières & Modules
+                        </a>
 
-                    <a href="{{ route('gestion.profil') }}"
-                       class="flex items-center gap-3 px-3 py-2.5 rounded-lg
-                       {{ request()->routeIs('gestion.profil') ? 'bg-[#135bec]/10 border-l-4 border-[#135bec] text-[#135bec] font-bold' : 'hover:bg-gray-50 dark:hover:bg-gray-800 text-[#4c669a] dark:text-gray-400' }}">
-                        <span class="material-symbols-outlined">person</span>
-                        Gestion du profil
-                    </a>
+                        <a href="{{ route('parametres') }}"
+                           class="flex items-center gap-3 px-3 py-2.5 rounded-lg
+                           {{ request()->routeIs('parametres') ? 'bg-[#135bec]/10 border-l-4 border-[#135bec] text-[#135bec] font-bold' : 'hover:bg-gray-50 dark:hover:bg-gray-800 text-[#4c669a] dark:text-gray-400' }}">
+                            <span class="material-symbols-outlined">settings</span>
+                            Paramètres
+                        </a>
 
-                    {{-- Lien Admin (visible uniquement pour les admins) --}}
-                    @if(auth()->check() && auth()->user()->hasRole('admin'))
                         <a href="{{ route('admin.dashboard') }}"
                            class="flex items-center gap-3 px-3 py-2.5 rounded-lg
                            {{ request()->routeIs('admin.dashboard') ? 'bg-[#135bec]/10 border-l-4 border-[#135bec] text-[#135bec] font-bold' : 'hover:bg-gray-50 dark:hover:bg-gray-800 text-[#4c669a] dark:text-gray-400' }}">
@@ -91,6 +107,14 @@
                             Admin
                         </a>
                     @endif
+
+                    {{-- Lien profil (disponible pour tous) --}}
+                    <a href="{{ route('gestion.profil') }}"
+                       class="flex items-center gap-3 px-3 py-2.5 rounded-lg
+                       {{ request()->routeIs('gestion.profil') ? 'bg-[#135bec]/10 border-l-4 border-[#135bec] text-[#135bec] font-bold' : 'hover:bg-gray-50 dark:hover:bg-gray-800 text-[#4c669a] dark:text-gray-400' }}">
+                        <span class="material-symbols-outlined">person</span>
+                        Gestion du profil
+                    </a>
                 </nav>
             </div>
 
@@ -112,19 +136,30 @@
 
             <div class="flex items-center gap-6">
                 <div class="flex items-center gap-6">
-                    <a class="text-[#0d121b] dark:text-gray-200 text-sm font-medium hover:text-[#135bec] transition-colors"
-                       href="{{ route('accueil') }}">Accueil</a>
-                          <a class="text-[#0d121b] dark:text-gray-200 text-sm font-medium hover:text-[#135bec] transition-colors"
-                              href="{{ route('filiere.index') }}">Filières & Modules</a>
-                    <a class="text-[#0d121b] dark:text-gray-200 text-sm font-medium hover:text-[#135bec] transition-colors"
-                       href="{{ route('parametres') }}">Paramètres</a>
-                    <a class="text-[#0d121b] dark:text-gray-200 text-sm font-medium hover:text-[#135bec] transition-colors"
-                       href="{{ route('gestion.profil') }}">Gestion profil</a>
-
-                    @if(auth()->check() && auth()->user()->hasRole('admin'))
+                    {{-- Zone Étudiant --}}
+                    @if(auth()->check() && auth()->user()->hasRole('etudiant'))
+                        <a class="text-[#0d121b] dark:text-gray-200 text-sm font-medium hover:text-[#135bec] transition-colors"
+                           href="{{ route('student.dashboard') }}">Mes Notes</a>
+                        <a class="text-[#0d121b] dark:text-gray-200 text-sm font-medium hover:text-[#135bec] transition-colors"
+                           href="{{ route('student.edit-password') }}">Changer mot de passe</a>
+                    {{-- Zone Professeur --}}
+                    @elseif(auth()->check() && auth()->user()->hasRole('enseignant'))
+                        <a class="text-[#0d121b] dark:text-gray-200 text-sm font-medium hover:text-[#135bec] transition-colors"
+                           href="{{ route('professor.welcome') }}">Accueil</a>
+                    {{-- Zone Admin --}}
+                    @elseif(auth()->check() && auth()->user()->hasRole('admin'))
+                        <a class="text-[#0d121b] dark:text-gray-200 text-sm font-medium hover:text-[#135bec] transition-colors"
+                           href="{{ route('accueil') }}">Accueil</a>
+                        <a class="text-[#0d121b] dark:text-gray-200 text-sm font-medium hover:text-[#135bec] transition-colors"
+                            href="{{ route('filiere.index') }}">Filières & Modules</a>
+                        <a class="text-[#0d121b] dark:text-gray-200 text-sm font-medium hover:text-[#135bec] transition-colors"
+                           href="{{ route('parametres') }}">Paramètres</a>
                         <a class="text-[#0d121b] dark:text-gray-200 text-sm font-medium hover:text-[#135bec] transition-colors"
                            href="{{ route('admin.dashboard') }}">Admin</a>
                     @endif
+
+                    <a class="text-[#0d121b] dark:text-gray-200 text-sm font-medium hover:text-[#135bec] transition-colors"
+                       href="{{ route('gestion.profil') }}">Gestion profil</a>
                 </div>
 
                 <div class="flex items-center gap-3">
@@ -148,12 +183,19 @@
 
                 <!-- Breadcrumbs (toujours affiché) -->
                 <nav class="flex flex-wrap gap-2 items-center">
-                    <a class="text-[#4c669a] dark:text-gray-400 text-sm font-medium hover:text-[#135bec] transition-colors"
-                       href="{{ route('accueil') }}">Accueil</a>
-                    <span class="text-[#4c669a] dark:text-gray-400 text-sm font-medium">/</span>
-                    <a class="text-[#4c669a] dark:text-gray-400 text-sm font-medium hover:text-[#135bec] transition-colors"
-                       href="{{ route('parametres') }}">Paramètres</a>
-                    <span class="text-[#4c669a] dark:text-gray-400 text-sm font-medium">/</span>
+                    @if(auth()->check() && auth()->user()->hasRole('admin'))
+                        <a class="text-[#4c669a] dark:text-gray-400 text-sm font-medium hover:text-[#135bec] transition-colors"
+                           href="{{ route('accueil') }}">Accueil</a>
+                        <span class="text-[#4c669a] dark:text-gray-400 text-sm font-medium">/</span>
+                    @elseif(auth()->check() && auth()->user()->hasRole('enseignant'))
+                        <a class="text-[#4c669a] dark:text-gray-400 text-sm font-medium hover:text-[#135bec] transition-colors"
+                           href="{{ route('professor.welcome') }}">Accueil</a>
+                        <span class="text-[#4c669a] dark:text-gray-400 text-sm font-medium">/</span>
+                    @elseif(auth()->check() && auth()->user()->hasRole('etudiant'))
+                        <a class="text-[#4c669a] dark:text-gray-400 text-sm font-medium hover:text-[#135bec] transition-colors"
+                           href="{{ route('student.dashboard') }}">Mes Notes</a>
+                        <span class="text-[#4c669a] dark:text-gray-400 text-sm font-medium">/</span>
+                    @endif
                     <span class="text-[#0d121b] dark:text-white text-sm font-medium">
                         @yield('breadcrumb', 'Page')
                     </span>

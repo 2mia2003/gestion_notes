@@ -8,6 +8,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use Spatie\Permission\Models\Role;
@@ -52,21 +53,23 @@ class RegisteredUserController extends Controller
 
         // 3) créer les rôles si inexistants (noms en minuscule)
         Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
-        Role::firstOrCreate(['name' => 'etudiant',  'guard_name' => 'web']);
+        Role::firstOrCreate(['name' => 'etudiant', 'guard_name' => 'web']);
+        Role::firstOrCreate(['name' => 'enseignant', 'guard_name' => 'web']);
+        Role::firstOrCreate(['name' => 'secretaire', 'guard_name' => 'web']);
 
-        // Si c'est le tout premier user => admin forcé; sinon rôle choisi par l'admin
+        // 4) attribuer le rôle sélectionné par l'admin (ou 'admin' pour le premier utilisateur)
         $roleToAssign = $isFirstUser ? 'admin' : $request->role;
         $user->assignRole($roleToAssign);
 
         // 4) Connexion automatique seulement pour le tout premier utilisateur
         event(new Registered($user));
         if ($isFirstUser) {
-            auth()->login($user);
+            Auth::login($user);
             return redirect()->route('accueil')
                 ->with('success', 'Premier utilisateur créé et connecté en tant qu\'admin.');
         }
 
         return redirect()->route('admin.dashboard')
-            ->with('success', "Utilisateur créé ({$user->email}) avec le rôle: {$roleToAssign}");
+            ->with('success', "Utilisateur créé ({$user->email}) avec le rôle: admin");
     }
 }

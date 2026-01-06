@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Module;
 use App\Models\Niveau;
+use App\Models\Filiere;
 use App\Models\Semestre;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -28,6 +29,7 @@ class ModuleController extends Controller
         $selected = $creating ? null : ($module ?: ($modules->first() ?: null));
 
         $niveaux = Niveau::orderBy('code')->get(['id','code','nom','filiere_id']);
+        $filieres = Filiere::orderBy('nom')->get(['id','nom']); // Add filieres for quick niveau creation
         $semestres = Semestre::query()
             ->whereHas('anneeAcademique', function ($q) {
                 $q->where('active', true);
@@ -46,6 +48,7 @@ class ModuleController extends Controller
             'modules' => $modules,
             'selected' => $selected,
             'niveaux' => $niveaux,
+            'filieres' => $filieres,
             'semestres' => $semestres,
             'users' => $users,
             'creating' => $creating,
@@ -61,7 +64,7 @@ class ModuleController extends Controller
             'code' => ['required','string','max:20', Rule::unique('modules','code')],
             'nom' => ['required','string','max:150'],
             'responsable_user_id' => ['nullable','exists:users,id'],
-            'credits' => ['nullable','integer','min:0','max:30'],
+            'credits' => ['required','integer','min:0','max:30'],
         ];
         if (Schema::hasColumn('modules', 'statut')) {
             $rules['statut'] = ['required','string', Rule::in(['en_attente','actif','inactif'])];
@@ -94,7 +97,7 @@ class ModuleController extends Controller
             'code' => ['required','string','max:20', Rule::unique('modules','code')->ignore($module->id)],
             'nom' => ['required','string','max:150'],
             'responsable_user_id' => ['nullable','exists:users,id'],
-            'credits' => ['nullable','integer','min:0','max:30'],
+            'credits' => ['required','integer','min:0','max:30'],
         ];
         if (Schema::hasColumn('modules', 'statut')) {
             $rules['statut'] = ['required','string', Rule::in(['en_attente','actif','inactif'])];
